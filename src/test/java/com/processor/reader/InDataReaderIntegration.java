@@ -1,12 +1,12 @@
 package com.processor.reader;
 
+import org.junit.Before;
+import org.junit.Test;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-
-import org.junit.Before;
-import org.junit.Test;
 
 public class InDataReaderIntegration {
     InDataReader dataReader;
