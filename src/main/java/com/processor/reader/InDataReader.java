@@ -12,6 +12,8 @@ public class InDataReader {
     static final int MAX_HEIGHT = 10; // [A-Za-z][0-9]
     static final int SIZE_PARAMS_AMOUNT = 2;
     static final String DELIM = "\t";
+    public static final int HEIGHT_POSITION = 0;
+    public static final int WIDTH_POSITION = 1;
 
     int height;
     int width;
@@ -23,7 +25,7 @@ public class InDataReader {
 
     /**
      * Input format is:
-     * 
+     * <p>
      * <pre>
      * <i>height width
      * Cell  values  separated   by  tabs
@@ -47,12 +49,12 @@ public class InDataReader {
 
             checkSizeRestrictions(currLine);
 
-            StringTokenizer tokenizer = createTokenizer(currLine);
+            String[] tokens = currLine.split(DELIM);
             for (int columnNumber = 0; columnNumber < width; columnNumber++) {
                 char columnChar = (char) ('A' + columnNumber);
                 String cellReference = String.valueOf(columnChar) + lineNumber;
 
-                tableCells.put(cellReference, new Cell(tokenizer.nextToken()));
+                tableCells.put(cellReference, new Cell(tokens[columnNumber]));
             }
         }
     }
@@ -69,9 +71,8 @@ public class InDataReader {
      * <li>Width check: amount of cells in each line should be equals to table
      * width.</li>
      * </ul>
-     * 
-     * @throws InDataFormatException
-     *             if some restriction is violated
+     *
+     * @throws InDataFormatException if some restriction is violated
      */
     private void checkSizeRestrictions(String currLine) throws InDataFormatException {
         if (currLine == null) {
@@ -82,32 +83,25 @@ public class InDataReader {
             throw new InDataFormatException("Empty line has been read");
         }
 
-        /*
-         * The width check creates StringTokenizer object and makes addtitionla
-         * string scan, to tokens count.
-         * 
-         * So, if the implementation faces performance problems, it will bew
-         * remake to 'one scan mode'.
-         */
-        StringTokenizer tokenizer = createTokenizer(currLine);
-        if (tokenizer.countTokens() != width) {
+        String[] tokens = currLine.split(DELIM);
+        if (tokens.length != width) {
             throw new InDataFormatException("Wrong amount of cells in the line: " + currLine);
         }
     }
 
     void readTableSize(String line) throws InDataFormatException {
-        StringTokenizer tokenizer = createTokenizer(line);
+        String[] tokens = line.split(DELIM);
 
-        if (tokenizer.countTokens() != SIZE_PARAMS_AMOUNT) {
+        if (tokens.length != SIZE_PARAMS_AMOUNT) {
             throw new InDataFormatException("Wrong amount of input params. First line should contains only height an width: " + line);
         }
 
-        height = Integer.valueOf(tokenizer.nextToken());
+        height = Integer.valueOf(tokens[HEIGHT_POSITION]);
         if (height <= 0) {
             throw new InDataFormatException("Height should be grater than zero.");
         }
 
-        width = Integer.valueOf(tokenizer.nextToken());
+        width = Integer.valueOf(tokens[WIDTH_POSITION]);
         if (width <= 0) {
             throw new InDataFormatException("Width should be grater than zero.");
         }
