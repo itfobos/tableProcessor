@@ -2,9 +2,10 @@ package com.processor.reader;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
-import java.util.StringTokenizer;
+import java.util.List;
 
 public class InDataReader {
 
@@ -35,12 +36,9 @@ public class InDataReader {
      */
     public void readTableData(BufferedReader bufferedReader) throws IOException, InDataFormatException {
         readTableSize(bufferedReader.readLine());
+        debugLog(String.format("height:%d  width:%d", height, width));
 
         readTableBody(bufferedReader);
-
-        if (bufferedReader.readLine() != null) {
-            throw new InDataFormatException("Actual table has more lines than defined in header.");
-        }
     }
 
     void readTableBody(BufferedReader bufferedReader) throws IOException, InDataFormatException {
@@ -49,18 +47,20 @@ public class InDataReader {
 
             checkSizeRestrictions(currLine);
 
-            String[] tokens = currLine.split(DELIM);
+            List<String> tokens = parseBodyLine(currLine);
             for (int columnNumber = 0; columnNumber < width; columnNumber++) {
                 char columnChar = (char) ('A' + columnNumber);
                 String cellReference = String.valueOf(columnChar) + lineNumber;
 
-                tableCells.put(cellReference, new Cell(tokens[columnNumber]));
+                tableCells.put(cellReference, new Cell(tokens.get(columnNumber)));
             }
         }
+
+        debugLog("body reading is over");
     }
 
-    private static StringTokenizer createTokenizer(String currLine) {
-        return new StringTokenizer(currLine, DELIM);
+    private void debugLog(String message) {
+        System.out.println("Debug: " + message);
     }
 
     /**
@@ -79,29 +79,48 @@ public class InDataReader {
             throw new InDataFormatException("Actual table has less lines, than defined in header");
         }
 
-        if (currLine.trim().isEmpty()) {
+        if (currLine.isEmpty()) {
             throw new InDataFormatException("Empty line has been read");
         }
 
-        String[] tokens = currLine.split(DELIM);
-        if (tokens.length != width) {
-            throw new InDataFormatException("Wrong amount of cells in the line: " + currLine);
+        List<String> tokens = parseBodyLine(currLine);
+        if (tokens.size() != width) {
+            throw new InDataFormatException("Wrong amount(" + tokens.size() + ") of cells in the line: " + currLine);
         }
     }
 
-    void readTableSize(String line) throws InDataFormatException {
-        String[] tokens = line.split(DELIM);
+    List<String> parseBodyLine(final String line) {
+        List<String> result = new ArrayList<>(width);
 
-        if (tokens.length != SIZE_PARAMS_AMOUNT) {
+        int lastIndex = 0;
+        int currentIndex;
+
+        do {
+            currentIndex = line.indexOf(DELIM, lastIndex);
+            currentIndex = currentIndex >= 0 ? currentIndex : line.length();
+
+            String currentToken = line.substring(lastIndex, currentIndex);
+            result.add(currentToken);
+
+            lastIndex = currentIndex + 1;
+        } while (currentIndex < line.length());
+
+        return result;
+    }
+
+    void readTableSize(String line) throws InDataFormatException {
+        List<String> tokens = parseBodyLine(line);
+
+        if (tokens.size() != SIZE_PARAMS_AMOUNT) {
             throw new InDataFormatException("Wrong amount of input params. First line should contains only height an width: " + line);
         }
 
-        height = Integer.valueOf(tokens[HEIGHT_POSITION]);
+        height = Integer.valueOf(tokens.get(HEIGHT_POSITION));
         if (height <= 0) {
             throw new InDataFormatException("Height should be grater than zero.");
         }
 
-        width = Integer.valueOf(tokens[WIDTH_POSITION]);
+        width = Integer.valueOf(tokens.get(WIDTH_POSITION));
         if (width <= 0) {
             throw new InDataFormatException("Width should be grater than zero.");
         }
@@ -117,5 +136,9 @@ public class InDataReader {
 
     public HashMap<String, Cell> getTableCells() {
         return tableCells;
+    }
+
+    public void debugPrintCells() {
+        tableCells.entrySet().forEach(entry -> System.out.println(entry.getKey() + "  " + entry.getValue()));
     }
 }

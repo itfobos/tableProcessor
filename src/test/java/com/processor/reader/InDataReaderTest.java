@@ -22,14 +22,31 @@ public class InDataReaderTest {
     }
 
     @Test
-    public void readTableBodyEmptyCellTest() throws IOException, InDataFormatException {
+    public void onlyEmptyCellsLineTest() throws IOException, InDataFormatException {
+        createOneLineTableTest("", "", "");
+    }
+
+    @Test
+    public void readTableBodyLastEmptyCellTest() throws IOException, InDataFormatException {
+        createOneLineTableTest("2", "=A1", "");
+    }
+
+    @Test
+    public void readTableBodyEmptyCellInTheMiddleTest() throws IOException, InDataFormatException {
+        createOneLineTableTest("1", "", "=A1");
+    }
+
+    @Test
+    public void readTableBodyFirstEmptyCellTest() throws IOException, InDataFormatException {
+        createOneLineTableTest("", "1", "=A1");
+    }
+
+    private void createOneLineTableTest(String a1Value, String b1Value, String c1Value) throws IOException, InDataFormatException {
         dataReader.height = 1;
         dataReader.width = 3;
 
-        final String a1CellValue = "2";
-        String b1CellValue = "";
-        String c1CellValue = "=A1";
-        final String sourceLine = a1CellValue + DELIM + b1CellValue + DELIM + c1CellValue;
+
+        final String sourceLine = a1Value + DELIM + b1Value + DELIM + c1Value;
         try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(sourceLine.getBytes())))) {
             dataReader.readTableBody(bufferedReader);
         }
@@ -37,9 +54,9 @@ public class InDataReaderTest {
         HashMap<String, Cell> tableCells = dataReader.getTableCells();
         assertThat(tableCells.size(), equalTo(3)/* Cells amount in source line */);
 
-        assertThat(tableCells.get("A1").getValue(), equalTo(a1CellValue));
-        assertThat(tableCells.get("B1").getValue(), equalTo(b1CellValue));
-        assertThat(tableCells.get("C1").getValue(), equalTo(c1CellValue));
+        assertThat(tableCells.get("A1").getValue(), equalTo(a1Value));
+        assertThat(tableCells.get("B1").getValue(), equalTo(b1Value));
+        assertThat(tableCells.get("C1").getValue(), equalTo(c1Value));
     }
 
     @Test

@@ -24,6 +24,6 @@ public class InDataReaderIntegration {
             dataReader.readTableData(bufferedReader);
         }
 
-        dataReader.getTableCells().entrySet().forEach(entry -> System.out.println(entry.getKey() + "  " + entry.getValue()));
+        dataReader.debugPrintCells();
     }
 }
