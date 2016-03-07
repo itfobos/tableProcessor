@@ -1,5 +1,7 @@
 package com.processor.reader;
 
+import com.processor.common.Cell;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -36,7 +38,6 @@ public class InDataReader {
      */
     public void readTableData(BufferedReader bufferedReader) throws IOException, InDataFormatException {
         readTableSize(bufferedReader.readLine());
-        debugLog(String.format("height:%d  width:%d", height, width));
 
         readTableBody(bufferedReader);
     }
@@ -55,8 +56,6 @@ public class InDataReader {
                 tableCells.put(cellReference, new Cell(tokens.get(columnNumber)));
             }
         }
-
-        debugLog("body reading is over");
     }
 
     private void debugLog(String message) {
