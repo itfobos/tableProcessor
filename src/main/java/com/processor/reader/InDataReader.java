@@ -12,7 +12,6 @@ import java.util.List;
 public class InDataReader {
 
     static final int MAX_WIDTH = 26;// alphabet size
-    static final int MAX_HEIGHT = 10; // [A-Za-z][0-9]
     static final int SIZE_PARAMS_AMOUNT = 2;
     static final String DELIM = "\t";
     public static final int HEIGHT_POSITION = 0;
@@ -125,10 +124,6 @@ public class InDataReader {
         }
 
         if (width > MAX_WIDTH) {
-            throw new InDataFormatException("Width should be less than " + MAX_WIDTH);
-        }
-
-        if (height > MAX_HEIGHT) {
             throw new InDataFormatException("Width should be less than " + MAX_WIDTH);
         }
     }
