@@ -1,7 +1,8 @@
 package com.processor.computation.parser;
 
+import static com.processor.computation.parser.LexemeUtils.isArithmeticOperation;
+
 public class Lexer {
-    public static final int ALPHABET_SIZE = 26;
     private FormulaBuffer buffer;
 
     public Lexer(String formula) {
@@ -16,7 +17,7 @@ public class Lexer {
 
         char symbol;
         if ((symbol = buffer.read()) != FormulaBuffer.EOF) {
-            if (isEnLetter(symbol)) {
+            if (LexemeUtils.isEnLetter(symbol)) {
                 result = parseReference(symbol);
             } else if (Character.isDigit(symbol)) {
                 result = parseNumber(symbol);
@@ -76,18 +77,5 @@ public class Lexer {
         } catch (NumberFormatException e) {
             return false;
         }
-    }
-
-    static boolean isEnLetter(char symbol) {
-        int diff = 'a' - Character.toLowerCase(symbol);
-        return Math.abs(diff) < ALPHABET_SIZE;
-    }
-
-    static boolean isArithmeticOperation(char symbol) {
-        return symbol == '+' || symbol == '-' || symbol == '*' || symbol == '/';
-    }
-
-    static boolean isDelimiter(char symbol) {
-        return symbol == FormulaBuffer.EOF || isArithmeticOperation(symbol);
     }
 }
