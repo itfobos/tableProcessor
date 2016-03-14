@@ -11,4 +11,13 @@ class LexemeUtils {
     public static boolean isArithmeticOperation(char symbol) {
         return symbol == '+' || symbol == '-' || symbol == '*' || symbol == '/';
     }
+
+    public static boolean isNumeric(String input) {
+        try {
+            Integer.parseInt(input);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
 }

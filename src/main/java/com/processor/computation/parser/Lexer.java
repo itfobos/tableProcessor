@@ -41,7 +41,7 @@ public class Lexer {
             builder.append(buffer.read());
         }
 
-        if (!isNumeric(builder.substring(1/*except first letter*/))) {
+        if (!LexemeUtils.isNumeric(builder.substring(1/*except first letter*/))) {
             fireError(builder);
         }
 
@@ -59,7 +59,7 @@ public class Lexer {
         }
 
         String result = builder.toString();
-        if (!isNumeric(result)) {
+        if (!LexemeUtils.isNumeric(result)) {
             fireError(builder);
         }
 
@@ -70,12 +70,4 @@ public class Lexer {
         throw new FormulaParseException("Lexeme is not available: '" + message + "'");
     }
 
-    private static boolean isNumeric(String input) {
-        try {
-            Integer.parseInt(input);
-            return true;
-        } catch (NumberFormatException e) {
-            return false;
-        }
-    }
 }

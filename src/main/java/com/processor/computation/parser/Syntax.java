@@ -1,11 +1,12 @@
 package com.processor.computation.parser;
 
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 
 public class Syntax {
     private Lexer lexer;
-    private List<FormulaPart> parts;
+    private List<FormulaPart> parts = new LinkedList<>();
 
     public Syntax(String formula) {
         this.lexer = new Lexer(formula);
@@ -24,8 +25,10 @@ public class Syntax {
         FormulaPart constOrRefPart;
         if (LexemeUtils.isEnLetter(lexeme.charAt(0))) {
             constOrRefPart = FormulaPart.reference(lexeme);
-        } else {
+        } else if (LexemeUtils.isNumeric(lexeme)) {
             constOrRefPart = FormulaPart.constant(Integer.valueOf(lexeme));
+        } else {
+            throw new FormulaParseException("Unexpected construction: " + lexeme + " It should be reference or constant here.");
         }
         parts.add(constOrRefPart);
 
