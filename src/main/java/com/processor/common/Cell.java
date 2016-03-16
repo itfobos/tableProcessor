@@ -1,6 +1,5 @@
 package com.processor.common;
 
-//TODO:
 public class Cell {
 
 
@@ -8,17 +7,21 @@ public class Cell {
     public static final char TEXT_PREFIX = '\'';
 
     private String value;
+    private String name;
 
-    public Cell(String value) {
+    private boolean processed;
+
+    public Cell(String name, String value) {
         this.value = value;
+        this.name = name;
     }
 
     public int getIntValue() {
-        if (isIntValue()) {
+        try {
             return Integer.parseInt(value);
+        } catch (NumberFormatException e) {
+            throw new UnsupportedOperationException("The cell value: '" + value + "' cant be interpret like int.");
         }
-
-        throw new UnsupportedOperationException("The cell value: '" + value + "' cant be interpret like int.");
     }
 
     public String getTextValue() {
@@ -33,6 +36,13 @@ public class Cell {
         return value.length() > 0 && value.charAt(0) == FORMULA_PREFIX;
     }
 
+    public String getFormula() {
+        if (isFormula()) {
+            return value.substring(1);//Skip FORMULA_PREFIX
+        }
+        throw new UnsupportedOperationException("The cell value: '" + value + "' isn't formula. ");
+    }
+
     public boolean isIntValue() {
         return value.length() > 0 && Character.isDigit(value.charAt(0));
     }
@@ -45,8 +55,20 @@ public class Cell {
         return value;
     }
 
+    public boolean isProcessed() {
+        return processed;
+    }
+
+    public void setProcessed(boolean processed) {
+        this.processed = processed;
+    }
+
     @Override
     public String toString() {
-        return "Cell{" + "value='" + value + '\'' + '}';
+        return "Cell{" +
+                "value='" + value + '\'' +
+                ", name='" + name + '\'' +
+                ", processed=" + processed +
+                '}';
     }
 }

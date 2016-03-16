@@ -52,7 +52,7 @@ public class InDataReader {
                 char columnChar = (char) ('A' + columnNumber);
                 String cellReference = String.valueOf(columnChar) + lineNumber;
 
-                tableCells.put(cellReference, new Cell(tokens.get(columnNumber)));
+                tableCells.put(cellReference, new Cell(cellReference, tokens.get(columnNumber)));
             }
         }
     }
