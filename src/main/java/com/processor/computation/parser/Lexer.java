@@ -36,11 +36,7 @@ public class Lexer {
         while (!isArithmeticOperation(buffer.lookAhead()) && (symbol = buffer.read()) != FormulaBuffer.EOF) {
             builder.append(symbol);
         }
-
-        if (isArithmeticOperation(buffer.lookAhead())) {
-            builder.append(buffer.read());
-        }
-
+        
         if (!LexemeUtils.isNumeric(builder.substring(1/*except first letter*/))) {
             fireError(builder);
         }
@@ -49,13 +45,9 @@ public class Lexer {
     }
 
     private String parseNumber(char symbol) throws FormulaParseException {
-        StringBuilder builder = new StringBuilder().append(Character.toUpperCase(symbol));
+        StringBuilder builder = new StringBuilder().append(symbol);
         while (!isArithmeticOperation(buffer.lookAhead()) && (symbol = buffer.read()) != FormulaBuffer.EOF) {
             builder.append(symbol);
-        }
-
-        if (isArithmeticOperation(buffer.lookAhead())) {
-            builder.append(buffer.read());
         }
 
         String result = builder.toString();

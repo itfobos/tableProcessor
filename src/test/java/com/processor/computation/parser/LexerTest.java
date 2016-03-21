@@ -8,6 +8,20 @@ import static org.junit.Assert.assertThat;
 
 public class LexerTest {
 
+    @Test
+    public void justConstantsTest() throws FormulaParseException {
+        String firstConst = "5";
+        String secondConst = "8";
+        String operation = "+";
+
+        Lexer lexer = new Lexer(firstConst + operation + secondConst);
+
+        assertThat(lexer.getLexeme(), equalTo(firstConst));
+        assertThat(lexer.getLexeme(), equalTo(operation));
+        assertThat(lexer.getLexeme(), equalTo(secondConst));
+        assertThat(lexer.getLexeme(), nullValue());
+    }
+
     @Test(expected = FormulaParseException.class)
     public void parseDigitsLeadingNotNumberTest() throws FormulaParseException {
         Lexer lexer = new Lexer("123s23");

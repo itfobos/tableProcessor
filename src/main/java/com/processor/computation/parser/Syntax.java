@@ -64,7 +64,7 @@ public class Syntax {
         }
 
         public static FormulaPart reference(String lexeme) {
-            return new FormulaPart(lexeme, PartType.REFERENCE);
+            return new FormulaPart(lexeme.toUpperCase(), PartType.REFERENCE);
         }
 
         private FormulaPart(String lexeme, PartType type) {
@@ -87,6 +87,15 @@ public class Syntax {
 
         public PartType getType() {
             return type;
+        }
+
+        @Override
+        public String toString() {
+            return "FormulaPart{" +
+                    "lexeme='" + lexeme + '\'' +
+                    ", constValue=" + constValue +
+                    ", type=" + type +
+                    '}';
         }
     }
 

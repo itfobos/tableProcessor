@@ -10,6 +10,22 @@ import static org.junit.Assert.assertTrue;
 
 public class SyntaxTest {
 
+    @Test
+    public void justConstantsTest() throws FormulaParseException {
+        String firstConst = "12";
+        String secondConst = "16";
+        String operation = "+";
+
+        Syntax syntax = new Syntax(firstConst + operation + secondConst);
+        syntax.checkFormulaSyntax();
+
+        List<Syntax.FormulaPart> parts = syntax.getParts();
+
+        assertThat(parts.get(0).getConstValue(), equalTo(Integer.valueOf(firstConst)));
+        assertThat(parts.get(1).getLexeme(), equalTo(operation));
+        assertThat(parts.get(2).getConstValue(), equalTo(Integer.valueOf(secondConst)));
+    }
+
     @Test(expected = FormulaParseException.class)
     public void operationsOnlyTest() throws FormulaParseException {
         Syntax syntax = new Syntax("+++");

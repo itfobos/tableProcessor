@@ -19,8 +19,8 @@ public class FormulaBuffer {
     }
 
     public char lookAhead() {
-        if (position < formula.length() - 1) {
-            return formula.charAt(position + 1);
+        if (position < formula.length()) {
+            return formula.charAt(position);
         } else {
             return EOF;
         }

@@ -55,6 +55,10 @@ public class Cell {
         return value;
     }
 
+    public String getName() {
+        return name;
+    }
+
     public boolean isProcessed() {
         return processed;
     }

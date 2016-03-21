@@ -1,9 +1,9 @@
 package com.processor.computation.parser;
 
-import org.junit.Assert;
 import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.equalTo;
+import static org.junit.Assert.assertThat;
 
 public class FormulaBufferTest {
 
@@ -19,22 +19,18 @@ public class FormulaBufferTest {
             stringBuilder.append(currentChar);
         }
 
-        Assert.assertThat(stringBuilder.toString(), equalTo(sourceText));
+        assertThat(stringBuilder.toString(), equalTo(sourceText));
     }
 
     @Test
     public void lookAheadTest() {
-        final String sourceText = "some text we're going to look ahead";
+        char someSymbol = 'a';
+        char aheadSymbol = 'd';
+        FormulaBuffer buffer = new FormulaBuffer(String.valueOf(new char[]{someSymbol, aheadSymbol}));
 
-        FormulaBuffer buffer = new FormulaBuffer(sourceText);
+        assertThat(buffer.lookAhead(), equalTo(someSymbol));
+        buffer.read();
 
-        char currentChar;
-        StringBuilder stringBuilder = new StringBuilder();
-        while ((currentChar = buffer.lookAhead()) != FormulaBuffer.EOF) {
-            buffer.read();//just shifting reading position
-            stringBuilder.append(currentChar);
-        }
-
-        Assert.assertThat(stringBuilder.toString(), equalTo(sourceText.substring(1)));
+        assertThat(buffer.lookAhead(), equalTo(aheadSymbol));
     }
 }
