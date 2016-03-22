@@ -4,7 +4,7 @@
 
     <groupId>com.processor</groupId>
     <artifactId>tableProcessor</artifactId>
-    <version>0.1-SNAPSHOT</version>
+    <version>LATEST</version>
     <packaging>jar</packaging>
 
     <name>tableProcessor</name>
@@ -28,6 +28,18 @@
                         <compilerArguments>
                             <encoding>utf8</encoding>
                         </compilerArguments>
+                    </configuration>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-jar-plugin</artifactId>
+                    <configuration>
+                        <archive>
+                            <manifest>
+                                <mainClass>com.processor.App</mainClass>
+                            </manifest>
+                        </archive>
                     </configuration>
                 </plugin>
             </plugins>

@@ -5,10 +5,8 @@ import com.processor.computation.parser.FormulaParseException;
 import com.processor.computation.parser.Syntax;
 import com.processor.computation.parser.Syntax.FormulaPart;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class Processor {
 
@@ -27,13 +25,23 @@ public class Processor {
     }
 
 
-    private HashMap<String, Cell> tableCells;
+    private Map<String, Cell> tableCells;
 
-    public Processor(HashMap<String, Cell> tableCells) {
-        this.tableCells = tableCells;
+    private Map<String, Integer> resultsCache = new HashMap<>();
+
+    public Processor(Map<String, Cell> tableCells) {
+        this.tableCells = Collections.unmodifiableMap(tableCells);
     }
 
-    public String evaluate(Cell cell) {
+    public Map<String, String> processCells() {
+        return tableCells.entrySet()
+                .stream()
+                .collect(Collectors.toMap(
+                        Map.Entry::getKey,
+                        e -> evaluate(e.getValue())));
+    }
+
+    String evaluate(Cell cell) {
         String result;
         if (cell.isText()) {
             result = cell.getTextValue();
@@ -53,14 +61,23 @@ public class Processor {
     }
 
     private int evaluateToInt(Cell cell) throws FormulaParseException {
+        int result;
         if (cell.isFormula()) {
-            return evaluateFormula(cell.getFormula());
+            Integer cachedValue = resultsCache.get(cell.getName());
+            if (cachedValue == null) {
+                result = evaluateFormula(cell.getFormula());
+                resultsCache.put(cell.getName(), result);
+            } else {
+                result = cachedValue;
+            }
         } else if (cell.isIntValue()) {
-            return cell.getIntValue();
+            result = cell.getIntValue();
         } else {
             //Text cell
             throw new FormulaParseException("Cell " + cell.getValue() + " should be text or formula.");
         }
+
+        return result;
     }
 
     int evaluateFormula(String formula) throws FormulaParseException {

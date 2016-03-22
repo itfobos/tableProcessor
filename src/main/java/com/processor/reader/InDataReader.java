@@ -5,7 +5,6 @@ import com.processor.common.Cell;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 
@@ -13,7 +12,7 @@ public class InDataReader {
 
     private static final int MAX_WIDTH = 26;// alphabet size
     private static final int SIZE_PARAMS_AMOUNT = 2;
-    static final String DELIM = "\t";
+    public static final String DELIM = "\t";
     private static final int HEIGHT_POSITION = 0;
     private static final int WIDTH_POSITION = 1;
 
@@ -23,7 +22,7 @@ public class InDataReader {
     /**
      * The table keeps mapping "cell refs(A1, B4, so on)" <--> "Cell object"
      */
-    private HashMap<String, Cell> tableCells = new LinkedHashMap<>();
+    private LinkedHashMap<String, Cell> tableCells = new LinkedHashMap<>();
 
     /**
      * Input format is:
@@ -128,11 +127,15 @@ public class InDataReader {
         }
     }
 
-    public HashMap<String, Cell> getTableCells() {
+    public LinkedHashMap<String, Cell> getTableCells() {
         return tableCells;
     }
 
     public void debugPrintCells() {
         tableCells.entrySet().forEach(entry -> System.out.println(entry.getKey() + "  " + entry.getValue()));
+    }
+
+    public int getWidth() {
+        return width;
     }
 }
