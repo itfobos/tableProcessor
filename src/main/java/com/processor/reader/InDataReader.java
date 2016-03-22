@@ -11,11 +11,11 @@ import java.util.List;
 
 public class InDataReader {
 
-    static final int MAX_WIDTH = 26;// alphabet size
-    static final int SIZE_PARAMS_AMOUNT = 2;
+    private static final int MAX_WIDTH = 26;// alphabet size
+    private static final int SIZE_PARAMS_AMOUNT = 2;
     static final String DELIM = "\t";
-    public static final int HEIGHT_POSITION = 0;
-    public static final int WIDTH_POSITION = 1;
+    private static final int HEIGHT_POSITION = 0;
+    private static final int WIDTH_POSITION = 1;
 
     int height;
     int width;
@@ -87,7 +87,7 @@ public class InDataReader {
         }
     }
 
-    List<String> parseBodyLine(final String line) {
+    private List<String> parseBodyLine(final String line) {
         List<String> result = new ArrayList<>(width);
 
         int lastIndex = 0;

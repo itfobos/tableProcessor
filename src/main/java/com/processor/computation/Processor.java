@@ -12,14 +12,9 @@ import java.util.Map;
 
 public class Processor {
 
-    private Map<String, ArithmeticOperation> operations = new HashMap<>(4);
+    private static final Map<String, ArithmeticOperation> operations = new HashMap<>(4);
 
-
-    private HashMap<String, Cell> tableCells;
-
-    public Processor(HashMap<String, Cell> tableCells) {
-        this.tableCells = tableCells;
-
+    static {
         ArithmeticOperation addition = (firstArg, secondArg) -> firstArg + secondArg;
         ArithmeticOperation subtraction = (firstArg, secondArg) -> firstArg - secondArg;
         ArithmeticOperation multiplication = (firstArg, secondArg) -> firstArg * secondArg;
@@ -29,6 +24,13 @@ public class Processor {
         operations.put("-", subtraction);
         operations.put("*", multiplication);
         operations.put("/", division);
+    }
+
+
+    private HashMap<String, Cell> tableCells;
+
+    public Processor(HashMap<String, Cell> tableCells) {
+        this.tableCells = tableCells;
     }
 
     public String evaluate(Cell cell) {
@@ -50,7 +52,7 @@ public class Processor {
         return result;
     }
 
-    int evaluateToInt(Cell cell) throws FormulaParseException {
+    private int evaluateToInt(Cell cell) throws FormulaParseException {
         if (cell.isFormula()) {
             return evaluateFormula(cell.getFormula());
         } else if (cell.isIntValue()) {

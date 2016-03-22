@@ -1,10 +1,8 @@
 package com.processor.common;
 
 public class Cell {
-
-
-    public static final char FORMULA_PREFIX = '=';
-    public static final char TEXT_PREFIX = '\'';
+    private static final char FORMULA_PREFIX = '=';
+    private static final char TEXT_PREFIX = '\'';
 
     private String value;
     private String name;
