@@ -12,18 +12,20 @@ import java.util.Set;
 import java.util.StringJoiner;
 
 public class App {
-    public static void main(String[] args) throws IOException, InDataFormatException {
+    public static void main(String[] args) throws IOException {
 
         InDataReader inDataReader = new InDataReader();
 
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(System.in))) {
             inDataReader.readTableData(reader);
+
+            Processor processor = new Processor(inDataReader.getTableCells());
+            Map<String, String> results = processor.processCells();
+
+            printResultTable(inDataReader.getTableCells().keySet(), results, inDataReader.getWidth());
+        } catch (InDataFormatException e) {
+            System.err.println(e.getMessage());
         }
-
-        Processor processor = new Processor(inDataReader.getTableCells());
-        Map<String, String> results = processor.processCells();
-
-        printResultTable(inDataReader.getTableCells().keySet(), results, inDataReader.getWidth());
     }
 
     private static void printResultTable(Set<String> cellNames, Map<String, String> results, int tableWidth) {

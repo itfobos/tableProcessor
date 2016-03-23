@@ -56,10 +56,10 @@ public class Processor {
             try {
                 result = String.valueOf(evaluateToInt(cell));
             } catch (FormulaParseException e) {
-                result = e.getMessage();
+                result = "#" + e.getMessage();
             }
         } else {
-            throw new IllegalArgumentException("Strange cell: " + cell);
+            result = "#Unknown cell type";
         }
 
         return result;
@@ -72,20 +72,22 @@ public class Processor {
                 throw new FormulaParseException("Cyclic reference");
             }
 
-            Integer cachedValue = resultsCache.get(cell.getName());
-            if (cachedValue == null) {
-                result = evaluateFormula(cell.getFormula());
-                resultsCache.put(cell.getName(), result);
-            } else {
-                result = cachedValue;
+            try {
+                Integer cachedValue = resultsCache.get(cell.getName());
+                if (cachedValue == null) {
+                    result = evaluateFormula(cell.getFormula());
+                    resultsCache.put(cell.getName(), result);
+                } else {
+                    result = cachedValue;
+                }
+            } finally {
+                computationChain.remove(cell.getName());
             }
-
-            computationChain.remove(cell.getName());
         } else if (cell.isIntValue()) {
             result = cell.getIntValue();
         } else {
             //Text cell
-            throw new FormulaParseException("Cell " + cell.getValue() + " should be text or formula.");
+            throw new FormulaParseException("Cell " + cell.getName() + " should be constant or formula.");
         }
 
         return result;

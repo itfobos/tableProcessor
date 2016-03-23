@@ -22,7 +22,7 @@ public class Cell {
 
     public String getTextValue() {
         if (isText()) {
-            return value.substring(1);//skip TEXT_PREFIX symbol
+            return !value.isEmpty() ? value.substring(1) : "";//skip TEXT_PREFIX symbol
         }
 
         throw new UnsupportedOperationException("The cell value: '" + value + "' isn't text. ");

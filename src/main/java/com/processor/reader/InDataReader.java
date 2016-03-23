@@ -76,7 +76,7 @@ public class InDataReader {
             throw new InDataFormatException("Actual table has less lines, than defined in header");
         }
 
-        if (currLine.isEmpty()) {
+        if (currLine.isEmpty() && width > 1/*in line is just one empty cell*/) {
             throw new InDataFormatException("Empty line has been read");
         }
 
