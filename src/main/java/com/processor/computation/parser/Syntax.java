@@ -16,7 +16,7 @@ public class Syntax {
         parseRefOrConst();
     }
 
-    boolean parseRefOrConst() throws FormulaParseException {
+    private boolean parseRefOrConst() throws FormulaParseException {
         String lexeme = lexer.getLexeme();
         if (lexeme == null) {
             return false;

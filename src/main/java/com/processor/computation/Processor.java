@@ -29,6 +29,11 @@ public class Processor {
 
     private Map<String, Integer> resultsCache = new HashMap<>();
 
+    /**
+     * Cell names that take part in formula computation. Need to escape cycles.
+     */
+    private Set<String> computationChain = new HashSet<>();
+
     public Processor(Map<String, Cell> tableCells) {
         this.tableCells = Collections.unmodifiableMap(tableCells);
     }
@@ -63,6 +68,10 @@ public class Processor {
     private int evaluateToInt(Cell cell) throws FormulaParseException {
         int result;
         if (cell.isFormula()) {
+            if (!computationChain.add(cell.getName())) {
+                throw new FormulaParseException("Cyclic reference");
+            }
+
             Integer cachedValue = resultsCache.get(cell.getName());
             if (cachedValue == null) {
                 result = evaluateFormula(cell.getFormula());
@@ -70,6 +79,8 @@ public class Processor {
             } else {
                 result = cachedValue;
             }
+
+            computationChain.remove(cell.getName());
         } else if (cell.isIntValue()) {
             result = cell.getIntValue();
         } else {

@@ -4,10 +4,8 @@ public class Cell {
     private static final char FORMULA_PREFIX = '=';
     private static final char TEXT_PREFIX = '\'';
 
-    private String value;
-    private String name;
-
-    private boolean processed;
+    private final String value;
+    private final String name;
 
     public Cell(String name, String value) {
         this.value = value;
@@ -57,20 +55,11 @@ public class Cell {
         return name;
     }
 
-    public boolean isProcessed() {
-        return processed;
-    }
-
-    public void setProcessed(boolean processed) {
-        this.processed = processed;
-    }
-
     @Override
     public String toString() {
         return "Cell{" +
                 "value='" + value + '\'' +
                 ", name='" + name + '\'' +
-                ", processed=" + processed +
                 '}';
     }
 }
